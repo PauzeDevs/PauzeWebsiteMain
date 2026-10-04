@@ -4,15 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#050505" />
-  <meta name="description" content="Pauze — creative developer and music producer." />
+  <meta name="description" content="Pauze — code, music, experiments." />
   <title>Pauze® — Make Things Move</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="motion.css" />
 </head>
 <body>
+  <div class="site-loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="loader-top"><span>PAUZE®</span><span>INITIALIZING / 001</span></div>
+      <div class="loader-word"><span>PAUZE.</span></div>
+      <div class="loader-line"><i></i></div>
+      <div class="loader-bottom"><span>DIGITAL / AUDIO / VISUAL</span><span>2026</span></div>
+    </div>
+  </div>
+
   <div class="noise" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><i></i></div>
   <div class="cursor cursor-dot" aria-hidden="true"></div>
   <div class="cursor cursor-ring" aria-hidden="true"></div>
 
@@ -23,13 +34,13 @@
   </header>
 
   <main id="top">
-    <section class="hero" id="hero">
+    <section class="hero is-active" id="hero">
       <div class="hero-grid"></div>
       <div class="hero-copy">
-        <p class="eyebrow">PAUZE / 001 — DIGITAL OBJECT</p>
+        <p class="eyebrow">PAUZE / DIGITAL STUDIO</p>
         <h1><span>MAKE</span><span class="outline">IT</span><span>MOVE.</span></h1>
         <div class="hero-bottom">
-          <p>Code, sound and experiments — packed into one digital identity.</p>
+          <p>Code, sound and experiments — built with intention, shipped with character.</p>
           <span class="scroll">SCROLL <i></i> 01</span>
         </div>
       </div>
@@ -38,22 +49,24 @@
         <div class="product-stage">
           <div class="product-can">
             <div class="can-top"></div>
-            <div class="can-bottom"></div>
             <div class="can-body">
-              <span class="can-mini">EST. 2026</span>
+              <span class="can-mini">PAUZE® / STUDIO</span>
               <strong>P</strong>
               <span class="can-name">PAUZE</span>
-              <span class="can-sub">DIGITAL / SOUND / MOTION</span>
+              <span class="can-sub">CODE / MUSIC / IDEAS</span>
             </div>
+            <div class="can-bottom"></div>
           </div>
           <div class="stage-shadow"></div>
         </div>
         <div class="product-orbit product-orbit-a"></div>
         <div class="product-orbit product-orbit-b"></div>
-        <span class="float-dot dot-one"></span><span class="float-dot dot-two"></span><span class="float-dot dot-three"></span>
+        <span class="float-dot dot-one"></span>
+        <span class="float-dot dot-two"></span>
+        <span class="float-dot dot-three"></span>
       </div>
 
-      <div class="hero-status"><span>PAUZE® / DIGITAL STUDIO</span><span>BLACK / WHITE SYSTEM</span><span>SCROLL TO EXPLORE ↓</span></div>
+      <div class="hero-status"><span>EST. 2026</span><span>SCROLL TO ENTER</span><span>01 / 06</span></div>
     </section>
 
     <section class="manifesto panel reveal">
@@ -65,7 +78,10 @@
     </section>
 
     <section class="ticker" aria-label="Pauze themes">
-      <div class="ticker-track"><span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b><span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b></div>
+      <div class="ticker-track">
+        <span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b>
+        <span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b>
+      </div>
     </section>
 
     <section class="projects panel reveal">
@@ -78,16 +94,36 @@
     </section>
 
     <section class="music panel reveal" id="music">
-      <div class="music-visual"><div class="disc"><div class="disc-center">P</div></div><div class="disc-meta"><span>NOW SPINNING</span><span>PAUZE / 2026</span></div></div>
-      <div class="music-copy"><div class="section-tag"><span>03</span><span>SOUND</span></div><h2>LISTEN<br /><em>IN.</em></h2><p>Two playlists. Two sides of the same headspace.</p><div class="playlist-list"><a class="playlist magnetic" href="#" id="punjabLink" target="_blank" rel="noreferrer"><span><small>01</small> PUNJAB DA PIND</span><b>↗</b></a><a class="playlist magnetic" href="#" id="englishLink" target="_blank" rel="noreferrer"><span><small>02</small> ESSENTIALS — ENGLISH SONGS</span><b>↗</b></a></div></div>
+      <div class="music-visual">
+        <div class="disc"><div class="disc-center">P</div></div>
+        <div class="disc-meta"><span>NOW SPINNING</span><span>PAUZE / 2026</span></div>
+      </div>
+      <div class="music-copy">
+        <div class="section-tag"><span>03</span><span>SOUND</span></div>
+        <h2>LISTEN<br /><em>IN.</em></h2>
+        <p>Two playlists. Two sides of the same headspace.</p>
+        <div class="playlist-list">
+          <a class="playlist magnetic" href="#" id="punjabLink" target="_blank" rel="noreferrer"><span><small>01</small> PUNJAB DA PIND</span><b>↗</b></a>
+          <a class="playlist magnetic" href="#" id="englishLink" target="_blank" rel="noreferrer"><span><small>02</small> ESSENTIALS — ENGLISH SONGS</span><b>↗</b></a>
+        </div>
+      </div>
     </section>
 
     <section class="social panel reveal" id="connect">
-      <div class="section-tag"><span>04</span><span>ELSEWHERE</span></div><h2>FIND<br /><em>PAUZE.</em></h2>
-      <div class="social-list"><a class="social-link magnetic" href="#" id="githubLink" target="_blank" rel="noreferrer"><span>GITHUB / @PAUZEDEVS</span><b>↗</b></a><a class="social-link magnetic" href="#" id="instagramLink" target="_blank" rel="noreferrer"><span>INSTAGRAM / @HIGHONTHEHIGHWAYY</span><b>↗</b></a><a class="social-link magnetic" href="#music"><span>AMAZON MUSIC / PLAYLISTS</span><b>↓</b></a></div>
+      <div class="section-tag"><span>04</span><span>ELSEWHERE</span></div>
+      <h2>FIND<br /><em>PAUZE.</em></h2>
+      <div class="social-list">
+        <a class="social-link magnetic" href="#" id="githubLink" target="_blank" rel="noreferrer"><span>GITHUB / @PAUZEDEVS</span><b>↗</b></a>
+        <a class="social-link magnetic" href="#" id="instagramLink" target="_blank" rel="noreferrer"><span>INSTAGRAM / @HIGHONTHEHIGHWAYY</span><b>↗</b></a>
+        <a class="social-link magnetic" href="#music"><span>AMAZON MUSIC / PLAYLISTS</span><b>↓</b></a>
+      </div>
     </section>
 
-    <section class="endcap reveal"><p>PAUZE®</p><h2>SEE YOU<br /><span>AFTER HOURS.</span></h2><a href="#top" class="back-top magnetic">BACK TO TOP ↑</a></section>
+    <section class="endcap reveal">
+      <p>PAUZE®</p>
+      <h2>SEE YOU<br /><span>AFTER HOURS.</span></h2>
+      <a href="#top" class="back-top magnetic">BACK TO TOP ↑</a>
+    </section>
   </main>
 
   <footer class="footer"><span>PAUZE®</span><span>BUILT AFTER HOURS.</span><span>© 2026</span></footer>
