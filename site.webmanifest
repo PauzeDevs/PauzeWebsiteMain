@@ -1,0 +1,10 @@
+{
+  "name": "Pauze® — Make Things Move",
+  "short_name": "Pauze",
+  "description": "Pauze — a monochrome digital studio for code, music and experiments.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml"}]
+}
