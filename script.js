@@ -808,3 +808,64 @@ connectLanyard();
     });
   }
 })();
+
+
+/* Pauze contact actions */
+(() => {
+  const form = document.getElementById("pauzeContactForm");
+  const feedback = document.getElementById("contactFeedback");
+  const copyButtons = [...document.querySelectorAll(".copy-email")];
+
+  function setFeedback(message, type = "") {
+    if (!feedback) return;
+    feedback.textContent = message;
+    feedback.className = "contact-feedback" + (type ? " is-" + type : "");
+  }
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const email = button.dataset.copyEmail;
+      if (!email) return;
+      const original = button.innerHTML;
+      try {
+        await navigator.clipboard.writeText(email);
+        button.innerHTML = "COPIED <b>✓</b>";
+        window.setTimeout(() => { button.innerHTML = original; }, 1400);
+      } catch {
+        window.location.href = "mailto:" + email;
+      }
+    });
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submit = form.querySelector(".contact-submit");
+    const formData = new FormData(form);
+    if (submit) {
+      submit.disabled = true;
+      submit.innerHTML = "SENDING... <b>↗</b>";
+    }
+    setFeedback("TRANSMITTING / PAUZE");
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" }
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+
+      form.reset();
+      setFeedback("MESSAGE SENT / THANK YOU", "success");
+      if (submit) submit.innerHTML = "MESSAGE SENT <b>✓</b>";
+    } catch {
+      setFeedback("SEND FAILED / USE DIRECT EMAIL", "error");
+      if (submit) submit.innerHTML = "SEND MESSAGE <b>↗</b>";
+    } finally {
+      window.setTimeout(() => {
+        if (submit) submit.disabled = false;
+        if (submit && !feedback?.classList.contains("is-success")) submit.innerHTML = "SEND MESSAGE <b>↗</b>";
+      }, 2200);
+    }
+  });
+})();
