@@ -15,26 +15,53 @@ for (const [id, url] of Object.entries({
   if (node) node.href = url;
 }
 
+const body = document.body;
 const loader = document.querySelector(".site-loader");
+const startButton = document.getElementById("startButton");
 const hero = document.getElementById("hero");
 const product = document.querySelector(".hero-product");
 const stage = document.querySelector(".product-stage");
 const progress = document.querySelector(".scroll-progress i");
+const manifesto = document.querySelector(".manifesto");
+const ticker = document.querySelector(".ticker");
 
 const revealObserver = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     if (entry.isIntersecting) entry.target.classList.add("visible");
   }
-}, { threshold: 0.14 });
+}, { threshold: 0.12 });
 
 document.querySelectorAll(".reveal").forEach((node) => revealObserver.observe(node));
 
-window.addEventListener("load", () => {
+let started = false;
+
+function startExperience() {
+  if (started) return;
+  started = true;
+
+  body.classList.remove("locked");
+  body.classList.add("scene-started");
+
+  if (loader) {
+    loader.classList.add("entering");
+    window.setTimeout(() => loader.remove(), 1250);
+  }
+
   window.setTimeout(() => {
-    if (loader) loader.classList.add("is-done");
-    if (hero) hero.classList.add("is-active");
-  }, 1450);
-}, { once: true });
+    hero?.classList.add("is-active");
+    updateScrollScene();
+  }, 250);
+}
+
+body.classList.add("locked");
+
+startButton?.addEventListener("click", startExperience);
+startButton?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    startExperience();
+  }
+});
 
 const finePointer = window.matchMedia("(pointer:fine)").matches;
 
@@ -120,18 +147,36 @@ function updateScrollScene() {
   const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
   const scrollRatio = pageHeight > 0 ? window.scrollY / pageHeight : 0;
 
-  if (progress) progress.style.height = Math.min(Math.max(scrollRatio, 0), 1) * 100 + "%";
+  if (progress) {
+    progress.style.height = Math.min(Math.max(scrollRatio, 0), 1) * 100 + "%";
+  }
 
-  if (!hero || !product || window.innerWidth <= 820) return;
+  if (!started || !hero) return;
 
-  const heroProgress = Math.min(Math.max(window.scrollY / hero.offsetHeight, 0), 1);
-  const y = heroProgress * 115;
-  const scale = 1 - heroProgress * 0.2;
+  const heroHeight = Math.max(hero.offsetHeight, 1);
+  const heroProgress = Math.min(Math.max(window.scrollY / heroHeight, 0), 1);
 
-  product.style.transform =
-    "translateY(calc(-50% + " + y + "px)) rotate(" + heroProgress * 4 + "deg) scale(" + scale + ")";
+  if (product) {
+    const y = heroProgress * 150;
+    const scale = 1 - heroProgress * 0.28;
+    const rotate = heroProgress * 8;
 
-  product.style.opacity = String(1 - heroProgress * 0.55);
+    product.style.transform =
+      "translateY(calc(-50% + " + y + "px)) rotate(" + rotate + "deg) scale(" + scale + ")";
+    product.style.opacity = String(1 - heroProgress * 0.62);
+  }
+
+  if (manifesto) {
+    const rect = manifesto.getBoundingClientRect();
+    const scene = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight * 0.9), 0), 1);
+    manifesto.style.setProperty("--scene-progress", scene.toFixed(3));
+  }
+
+  if (ticker) {
+    const tickerRect = ticker.getBoundingClientRect();
+    const drift = (window.innerHeight * 0.5 - tickerRect.top) * 0.035;
+    ticker.style.setProperty("--ticker-drift", drift.toFixed(2) + "px");
+  }
 }
 
 window.addEventListener("scroll", () => {
@@ -145,4 +190,5 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 
 window.addEventListener("resize", updateScrollScene, { passive: true });
+
 updateScrollScene();
