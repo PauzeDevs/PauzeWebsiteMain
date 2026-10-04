@@ -5,14 +5,12 @@ const LINKS = {
   instagram: "https://www.instagram.com/highonthehighwayy?stkn=MXR6ZHgzejM4dWs0ZQ=="
 };
 
-const ids = {
+for (const [id, url] of Object.entries({
   punjabLink: LINKS.punjab,
   englishLink: LINKS.english,
   githubLink: LINKS.github,
   instagramLink: LINKS.instagram
-};
-
-for (const [id, url] of Object.entries(ids)) {
+})) {
   const node = document.getElementById(id);
   if (node) node.href = url;
 }
@@ -26,29 +24,17 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll(".reveal").forEach((node) => revealObserver.observe(node));
 
 const finePointer = window.matchMedia("(pointer:fine)").matches;
-
 if (finePointer) {
   const dot = document.querySelector(".cursor-dot");
   const ring = document.querySelector(".cursor-ring");
-
   window.addEventListener("pointermove", (event) => {
     dot.style.left = event.clientX + "px";
     dot.style.top = event.clientY + "px";
-    ring.animate(
-      { left: event.clientX + "px", top: event.clientY + "px" },
-      { duration: 180, fill: "forwards" }
-    );
+    ring.animate({ left: event.clientX + "px", top: event.clientY + "px" }, { duration: 180, fill: "forwards" });
   }, { passive: true });
-
   document.querySelectorAll("a, .project, .playlist").forEach((node) => {
-    node.addEventListener("mouseenter", () => {
-      ring.style.width = "54px";
-      ring.style.height = "54px";
-    });
-    node.addEventListener("mouseleave", () => {
-      ring.style.width = "34px";
-      ring.style.height = "34px";
-    });
+    node.addEventListener("mouseenter", () => { ring.style.width = "54px"; ring.style.height = "54px"; });
+    node.addEventListener("mouseleave", () => { ring.style.width = "34px"; ring.style.height = "34px"; });
   });
 }
 
@@ -59,13 +45,26 @@ document.querySelectorAll(".magnetic").forEach((node) => {
     const y = ((event.clientY - rect.top) / rect.height - 0.5) * 8;
     node.style.transform = `translate(${x}px,${y}px)`;
   });
-  node.addEventListener("pointerleave", () => {
-    node.style.transform = "";
-  });
+  node.addEventListener("pointerleave", () => { node.style.transform = ""; });
 });
 
-const heroObject = document.querySelector(".hero-object");
+const hero = document.getElementById("hero");
+const product = document.querySelector(".hero-product");
+let ticking = false;
+
+function updateHero() {
+  if (!hero || !product || window.innerWidth <= 820) return;
+  const progress = Math.min(Math.max(window.scrollY / hero.offsetHeight, 0), 1);
+  const rotate = -5 + progress * 30;
+  const scale = 1 - progress * 0.18;
+  product.style.transform = `translateY(calc(-50% + ${progress * 95}px)) rotate(${progress * 3}deg) scale(${scale})`;
+  product.style.opacity = String(1 - progress * 0.45);
+}
+
 window.addEventListener("scroll", () => {
-  if (!heroObject || window.innerWidth <= 820) return;
-  heroObject.style.marginTop = `${window.scrollY * 0.07}px`;
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { updateHero(); ticking = false; });
 }, { passive: true });
+
+updateHero();
