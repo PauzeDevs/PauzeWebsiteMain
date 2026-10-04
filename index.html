@@ -1,74 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050505" />
-    <meta name="description" content="Pauze — digital work, music and experiments." />
-    <title>Pauze — Digital After Hours</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="noise" aria-hidden="true"></div>
-    <header class="nav">
-      <a class="brand" href="#top" aria-label="Pauze home">Pauze<span>®</span></a>
-      <div class="nav-meta"><span>INDEPENDENT</span><span>EST. 2026</span></div>
-      <a class="nav-link" href="#connect">CONNECT <span>↗</span></a>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Pauze — code, music, experiments." />
+  <title>Pauze® — Make Things Move</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor cursor-dot" aria-hidden="true"></div>
+  <div class="cursor cursor-ring" aria-hidden="true"></div>
 
-    <main id="top">
-      <section class="hero section-pad">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">A DIGITAL SPACE BY PAUZE</p>
-          <h1>MAKE<br /><em>NOISE.</em></h1>
-          <p class="hero-sub">Code, sound, ideas and everything that happens when the world gets quiet.</p>
+  <header class="nav">
+    <a class="brand magnetic" href="#top" aria-label="Pauze home">Pauze<span>®</span></a>
+    <div class="nav-center"><span>CREATIVE DEVELOPER</span><i></i><span>MUSIC PRODUCER</span></div>
+    <a class="nav-link magnetic" href="#connect">CONNECT <b>↗</b></a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">PAUZE / DIGITAL STUDIO</p>
+        <h1><span>MAKE</span><span class="outline">IT</span><span>MOVE.</span></h1>
+        <div class="hero-bottom">
+          <p>Code, sound and experiments — built with intention, shipped with character.</p>
+          <span class="scroll">SCROLL <i></i> 01</span>
         </div>
-        <div class="hero-orbit" aria-hidden="true">
-          <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
-          <div class="core">P</div>
+      </div>
+      <div class="hero-object" aria-hidden="true">
+        <div class="object-shell">
+          <div class="object-inner">P</div>
         </div>
-        <div class="scroll-cue"><span>SCROLL TO EXPLORE</span><i></i></div>
-      </section>
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <span class="float-dot dot-one"></span><span class="float-dot dot-two"></span><span class="float-dot dot-three"></span>
+      </div>
+    </section>
 
-      <section class="statement section-pad reveal">
-        <p class="eyebrow">01 / THE IDEA</p>
-        <h2>Not a portfolio.<br /><span>A signal.</span></h2>
-        <p class="statement-body">Pauze is a personal playground for building, producing and shipping things that feel different.</p>
-      </section>
+    <section class="manifesto panel reveal">
+      <div class="section-tag"><span>01</span><span>THE IDEA</span></div>
+      <div class="manifesto-main">
+        <h2>THIS IS A<br /><em>PLACE TO BUILD.</em></h2>
+        <p>Not a polished showroom. A living space for things that deserve to exist: interfaces, tools, visuals, sounds and ideas.</p>
+      </div>
+    </section>
 
-      <section class="marquee" aria-label="Pauze themes">
-        <div class="marquee-track"><span>CODE</span><b>✦</b><span>MUSIC</span><b>✦</b><span>DESIGN</span><b>✦</b><span>EXPERIMENTS</span><b>✦</b><span>CODE</span><b>✦</b><span>MUSIC</span><b>✦</b></div>
-      </section>
+    <section class="ticker" aria-label="Pauze themes">
+      <div class="ticker-track">
+        <span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b>
+        <span>CODE</span><b>×</b><span>MUSIC</span><b>×</b><span>DESIGN</span><b>×</b><span>EXPERIMENTS</span><b>×</b>
+      </div>
+    </section>
 
-      <section class="work section-pad reveal">
-        <div class="section-head"><p class="eyebrow">02 / WHAT I DO</p><p class="mono">SELECTED SIGNALS</p></div>
-        <div class="work-grid">
-          <article class="work-card"><span>01</span><h3>BUILD</h3><p>Web experiences, tools, bots and experiments made from zero.</p><div class="card-line"></div></article>
-          <article class="work-card featured"><span>02</span><h3>PRODUCE</h3><p>Music, visuals and digital worlds with a pulse of their own.</p><div class="card-line"></div></article>
-          <article class="work-card"><span>03</span><h3>EXPLORE</h3><p>New ideas, strange interfaces and whatever comes next.</p><div class="card-line"></div></article>
+    <section class="projects panel reveal">
+      <div class="section-head"><div class="section-tag"><span>02</span><span>SELECTED WORK</span></div><span class="mono">MOVE / FEEL / REPEAT</span></div>
+      <div class="project-stack">
+        <article class="project">
+          <span class="project-no">01</span>
+          <div><p class="project-type">WEB / INTERACTION</p><h3>BUILD</h3></div>
+          <p class="project-copy">Interfaces, tools and digital products that feel as good as they work.</p><b class="project-arrow">↗</b>
+        </article>
+        <article class="project">
+          <span class="project-no">02</span>
+          <div><p class="project-type">AUDIO / VISUAL</p><h3>PRODUCE</h3></div>
+          <p class="project-copy">Music, visual identity and worlds designed to carry a mood.</p>
+          <b class="project-arrow">↗</b>
+        </article>
+        <article class="project">
+          <span class="project-no">03</span>
+          <div><p class="project-type">EXPERIMENT / R&D</p><h3>EXPLORE</h3></div>
+          <p class="project-copy">Odd ideas, prototypes and the next thing that shouldn't exist yet.</p>
+          <b class="project-arrow">↗</b>
+        </article>
+      </div>
+    </section>
+
+    <section class="music panel reveal" id="music">
+      <div class="music-visual">
+        <div class="disc"><div class="disc-center">P</div></div>
+        <div class="disc-meta"><span>NOW SPINNING</span><span>PAUZE / 2026</span></div>
+      </div>
+      <div class="music-copy">
+        <div class="section-tag"><span>03</span><span>SOUND</span></div>
+        <h2>LISTEN<br /><em>IN.</em></h2>
+        <p>Two playlists. Two sides of the same headspace.</p>
+        <div class="playlist-list">
+          <a class="playlist magnetic" href="#" id="punjabLink" target="_blank" rel="noreferrer">
+            <span><small>01</small> PUNJAB DA PIND</span><b>↗</b>
+          </a>
+          <a class="playlist magnetic" href="#" id="englishLink" target="_blank" rel="noreferrer">
+            <span><small>02</small> ESSENTIALS — ENGLISH SONGS</span><b>↗</b>
+          </a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="music section-pad reveal">
-        <div class="music-art"><div class="vinyl"><div class="vinyl-label">P</div></div></div>
-        <div class="music-copy"><p class="eyebrow">03 / SOUND</p><h2>PLAY IT<br /><em>LOUD.</em></h2><p>Tap into the Pauze playlist. The soundtrack changes; the energy doesn't.</p><a class="button" id="musicLink" href="#" target="_blank" rel="noreferrer">LISTEN ON AMAZON MUSIC <span>↗</span></a></div>
-      </section>
+    <section class="social panel reveal" id="connect">
+      <div class="section-tag"><span>04</span><span>ELSEWHERE</span></div>
+      <h2>FIND<br /><em>PAUZE.</em></h2>
+      <div class="social-list">
+        <a class="social-link magnetic" href="#" id="githubLink" target="_blank" rel="noreferrer"><span>GITHUB / @PAUZEDEVS</span><b>↗</b></a>
+        <a class="social-link magnetic" href="#" id="instagramLink" target="_blank" rel="noreferrer"><span>INSTAGRAM / @HIGHONTHEHIGHWAYY</span><b>↗</b></a>
+        <a class="social-link magnetic" href="#music"><span>AMAZON MUSIC / PLAYLISTS</span><b>↓</b></a>
+      </div>
+    </section>
 
-      <section class="connect section-pad reveal" id="connect">
-        <p class="eyebrow">04 / FIND PAUZE</p>
-        <h2>STAY<br /><em>CONNECTED.</em></h2>
-        <div class="links">
-          <a id="githubLink" href="#" target="_blank" rel="noreferrer"><span>GITHUB</span><b>↗</b></a>
-          <a id="instagramLink" href="#" target="_blank" rel="noreferrer"><span>INSTAGRAM</span><b>↗</b></a>
-          <a id="amazonLink" href="#" target="_blank" rel="noreferrer"><span>AMAZON MUSIC</span><b>↗</b></a>
-        </div>
-      </section>
-    </main>
+    <section class="endcap reveal">
+      <p>PAUZE®</p>
+      <h2>SEE YOU<br /><span>AFTER HOURS.</span></h2>
+      <a href="#top" class="back-top magnetic">BACK TO TOP ↑</a>
+    </section>
+  </main>
 
-    <footer class="footer"><span>PAUZE®</span><span>BUILT AFTER HOURS.</span><span>© 2026</span></footer>
-    <script src="script.js"></script>
-  </body>
+  <footer class="footer"><span>PAUZE®</span><span>BUILT AFTER HOURS.</span><span>© 2026</span></footer>
+  <script src="script.js"></script>
+</body>
 </html>
