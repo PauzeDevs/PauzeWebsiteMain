@@ -22,11 +22,26 @@ const hero = document.getElementById("hero");
 const product = document.querySelector(".hero-product");
 const stage = document.querySelector(".product-stage");
 const progress = document.querySelector(".scroll-progress i");
+const manifesto = document.querySelector(".manifesto");
+const ticker = document.querySelector(".ticker");
+const journeyTracks = Array.from(document.querySelectorAll(".journey-track"));
+const sceneWash = document.querySelector(".scene-wash");
 
 const revealObserver = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     if (entry.isIntersecting) {
       entry.target.classList.add("visible");
+
+      if (
+        started &&
+        sceneWash &&
+        entry.target.matches("section.reveal") &&
+        entry.target.id !== "hero"
+      ) {
+        sceneWash.classList.remove("playing");
+        void sceneWash.offsetWidth;
+        sceneWash.classList.add("playing");
+      }
     }
   }
 }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
@@ -89,7 +104,14 @@ if (finePointer) {
     }
   }, { passive: true });
 
+  let pointerFrame = null;
+
   function animatePointer() {
+    if (document.hidden) {
+      pointerFrame = null;
+      return;
+    }
+
     currentX += (mouseX - currentX) * 0.11;
     currentY += (mouseY - currentY) * 0.11;
 
@@ -109,10 +131,16 @@ if (finePointer) {
         tx.toFixed(1) + "px," + ty.toFixed(1) + "px,0)";
     }
 
-    requestAnimationFrame(animatePointer);
+    pointerFrame = requestAnimationFrame(animatePointer);
   }
 
-  animatePointer();
+  pointerFrame = requestAnimationFrame(animatePointer);
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && pointerFrame === null) {
+      pointerFrame = requestAnimationFrame(animatePointer);
+    }
+  });
 
   document.querySelectorAll("a, .project, .question").forEach((node) => {
     node.addEventListener("mouseenter", () => {
@@ -180,18 +208,17 @@ function updateScrollScene() {
     manifesto.style.setProperty("--scene-progress", scene.toFixed(3));
   }
 
-  const ticker = document.querySelector(".ticker");
   if (ticker) {
     const rect = ticker.getBoundingClientRect();
     const drift = (window.innerHeight * 0.5 - rect.top) * 0.035;
     ticker.style.setProperty("--ticker-drift", drift.toFixed(2) + "px");
   }
 
-  document.querySelectorAll(".journey-track").forEach((track) => {
+  for (const track of journeyTracks) {
     const rect = track.getBoundingClientRect();
     const drift = (window.innerHeight * 0.5 - rect.top) * 0.018;
     track.style.setProperty("--journey-drift", drift.toFixed(2) + "px");
-  });
+  }
 }
 
 window.addEventListener("scroll", () => {
