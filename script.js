@@ -2,7 +2,7 @@ const LINKS = {
   punjab: "https://music.amazon.in/user-playlists/7d8b2c82ff544ae58455e2cdd411c1d3i8n0?ref=dm_sh_4BQ1GOhm7sfJiIO6uJSzcD2rw",
   english: "https://music.amazon.in/user-playlists/600349506def4aabb752b524c5476634i8n0?ref=dm_sh_3i39aHwXg7mWjgmyfVc0pAQpF",
   github: "https://github.com/PauzeDevs",
-  instagram: "https://www.instagram.com/highonthehighwayy?stkn=MXR6ZHgzejM4dWs0ZQ=="
+  instagram: "https://www.instagram.com/Pauze.wav/"
 };
 
 for (const [id, url] of Object.entries({
