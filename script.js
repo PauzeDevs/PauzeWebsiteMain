@@ -408,3 +408,236 @@ window.addEventListener("resize", updateMusicScene, { passive: true });
 activeMusicSide = 0;
 selectMusicSide(0);
 updateMusicScene();
+
+
+/* Lanyard live Discord presence */
+const LANYARD_USER_ID = "1547264515182432398";
+const LANYARD_REST = "https://api.lanyard.rest/v1/users/" + LANYARD_USER_ID;
+const LANYARD_SOCKET = "wss://api.lanyard.rest/socket";
+
+const presenceCard = document.getElementById("lanyardPresence");
+const presenceAvatar = document.getElementById("presenceAvatar");
+const presenceName = document.getElementById("presenceName");
+const presenceState = document.getElementById("presenceState");
+const presenceActivity = document.getElementById("presenceActivity");
+const presenceDetail = document.getElementById("presenceDetail");
+const presencePlatform = document.getElementById("presencePlatform");
+const presenceUpdated = document.getElementById("presenceUpdated");
+
+const presenceLabels = {
+  online: "ONLINE",
+  idle: "IDLE",
+  dnd: "DO NOT DISTURB",
+  offline: "OFFLINE"
+};
+
+function setPresenceState(status, copy) {
+  const safe = presenceLabels[status] ? status : "offline";
+  if (presenceState) {
+    presenceState.className = "presence-state " + safe;
+    const label = presenceState.querySelector("span");
+    if (label) label.textContent = copy || presenceLabels[safe];
+  }
+}
+
+function setPresenceText(activity = "PAUZE", detail = "Waiting for a live Discord signal.") {
+  if (presenceActivity) presenceActivity.textContent = activity;
+  if (presenceDetail) presenceDetail.textContent = detail;
+}
+
+function formatPlatform(data) {
+  const platforms = [];
+  if (data.active_on_discord_desktop) platforms.push("DESKTOP");
+  if (data.active_on_discord_mobile) platforms.push("MOBILE");
+  if (data.active_on_discord_web) platforms.push("WEB");
+  return platforms.length ? platforms.join(" + ") : "LANYARD / REAL-TIME";
+}
+
+function findCustomStatus(activities) {
+  return (activities || []).find((activity) => activity.type === 4 && activity.state);
+}
+
+function findMainActivity(activities) {
+  return (activities || []).find((activity) => activity.type !== 4);
+}
+
+function renderPresence(data) {
+  if (!data) return;
+
+  const user = data.discord_user || {};
+  const displayName = user.global_name || user.username || "PAUZE";
+  if (presenceName) presenceName.textContent = displayName;
+
+  if (presenceAvatar && user.id && user.avatar) {
+    presenceAvatar.src = "https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + ".png?size=128";
+    presenceAvatar.classList.add("has-image");
+  }
+
+  const status = data.discord_status || "offline";
+  setPresenceState(status);
+
+  const spotify = data.listening_to_spotify && data.spotify;
+  const mainActivity = findMainActivity(data.activities);
+  const customStatus = findCustomStatus(data.activities);
+
+  if (spotify) {
+    setPresenceText(
+      spotify.song || "SPOTIFY",
+      [spotify.artist, spotify.album].filter(Boolean).join(" · ") || "Listening on Spotify"
+    );
+    if (presenceCard) presenceCard.dataset.mode = "spotify";
+  } else if (mainActivity) {
+    const details = [mainActivity.details, mainActivity.state].filter(Boolean).join(" · ");
+    setPresenceText(mainActivity.name || "DISCORD ACTIVITY", details || "Active on Discord");
+    if (presenceCard) presenceCard.dataset.mode = "activity";
+  } else if (customStatus) {
+    setPresenceText("CUSTOM STATUS", customStatus.state);
+    if (presenceCard) presenceCard.dataset.mode = "custom";
+  } else {
+    setPresenceText(
+      status === "offline" ? "PAUZE IS AWAY" : "PAUZE IS HERE",
+      status === "offline" ? "No active Discord presence right now." : "Present on Discord, nothing currently playing."
+    );
+    if (presenceCard) presenceCard.dataset.mode = "idle";
+  }
+
+  if (presencePlatform) presencePlatform.textContent = formatPlatform(data);
+
+  if (presenceUpdated) {
+    const time = new Date();
+    presenceUpdated.textContent = "SIGNAL / " + time.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false
+    });
+  }
+}
+
+function setPresenceConnection(copy) {
+  if (presenceUpdated) presenceUpdated.textContent = copy;
+}
+
+async function bootstrapPresence() {
+  try {
+    const response = await fetch(LANYARD_REST, {
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) throw new Error("Lanyard REST " + response.status);
+
+    const payload = await response.json();
+    if (payload.success && payload.data) {
+      renderPresence(payload.data);
+    } else {
+      throw new Error("User is not being monitored");
+    }
+  } catch (error) {
+    setPresenceState("offline", "NOT CONNECTED");
+    setPresenceText("LANYARD SIGNAL", "Join Lanyard's Discord server to expose this account to the public presence API.");
+    setPresenceConnection("WAITING / LANYARD");
+  }
+}
+
+function connectLanyard() {
+  if (!("WebSocket" in window)) return;
+
+  let socket;
+  let heartbeatTimer;
+  let reconnectTimer;
+  let reconnectDelay = 1500;
+
+  const cleanup = () => {
+    window.clearInterval(heartbeatTimer);
+    window.clearTimeout(reconnectTimer);
+    heartbeatTimer = null;
+    reconnectTimer = null;
+  };
+
+  const scheduleReconnect = () => {
+    if (reconnectTimer || document.hidden) return;
+    reconnectTimer = window.setTimeout(() => {
+      reconnectTimer = null;
+      connect();
+    }, reconnectDelay);
+    reconnectDelay = Math.min(reconnectDelay * 1.6, 30000);
+  };
+
+  function connect() {
+    cleanup();
+    setPresenceConnection("CONNECTING / LANYARD");
+
+    try {
+      socket = new WebSocket(LANYARD_SOCKET);
+    } catch {
+      scheduleReconnect();
+      return;
+    }
+
+    socket.addEventListener("open", () => {
+      reconnectDelay = 1500;
+    });
+
+    socket.addEventListener("message", (event) => {
+      let packet;
+      try { packet = JSON.parse(event.data); } catch { return; }
+
+      if (packet.op === 1) {
+        const interval = Number(packet.d?.heartbeat_interval) || 30000;
+        window.clearInterval(heartbeatTimer);
+        heartbeatTimer = window.setInterval(() => {
+          if (socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({ op: 3 }));
+          }
+        }, interval);
+
+        socket.send(JSON.stringify({
+          op: 2,
+          d: { subscribe_to_ids: [LANYARD_USER_ID] }
+        }));
+        return;
+      }
+
+      if (packet.op === 0 && packet.t === "INIT_STATE") {
+        const data = packet.d?.[LANYARD_USER_ID];
+        if (data) renderPresence(data);
+        else {
+          setPresenceState("offline", "NOT CONNECTED");
+          setPresenceText("LANYARD SIGNAL", "This Discord account is not currently monitored by Lanyard.");
+        }
+        setPresenceConnection("LIVE / LANYARD");
+        return;
+      }
+
+      if (packet.op === 0 && packet.t === "PRESENCE_UPDATE" && packet.d?.user_id === LANYARD_USER_ID) {
+        renderPresence(packet.d);
+        setPresenceConnection("LIVE / LANYARD");
+      }
+    });
+
+    socket.addEventListener("close", () => {
+      cleanup();
+      setPresenceConnection("RECONNECTING / LANYARD");
+      scheduleReconnect();
+    });
+
+    socket.addEventListener("error", () => {
+      if (socket.readyState === WebSocket.OPEN) socket.close();
+    });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cleanup();
+      if (socket && socket.readyState === WebSocket.OPEN) socket.close();
+    } else {
+      reconnectDelay = 1500;
+      connect();
+      bootstrapPresence();
+    }
+  });
+
+  connect();
+}
+
+bootstrapPresence();
+connectLanyard();
