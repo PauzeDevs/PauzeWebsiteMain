@@ -22,23 +22,24 @@ const hero = document.getElementById("hero");
 const product = document.querySelector(".hero-product");
 const stage = document.querySelector(".product-stage");
 const progress = document.querySelector(".scroll-progress i");
-const manifesto = document.querySelector(".manifesto");
-const ticker = document.querySelector(".ticker");
 
 const revealObserver = new IntersectionObserver((entries) => {
   for (const entry of entries) {
-    if (entry.isIntersecting) entry.target.classList.add("visible");
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
   }
-}, { threshold: 0.12 });
+}, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
 
-document.querySelectorAll(".reveal").forEach((node) => revealObserver.observe(node));
+document.querySelectorAll(".reveal, .reveal-stagger").forEach((node) => {
+  revealObserver.observe(node);
+});
 
 let started = false;
 
 function startExperience() {
   if (started) return;
   started = true;
-
   body.classList.remove("locked");
   body.classList.add("scene-started");
 
@@ -48,7 +49,7 @@ function startExperience() {
   }
 
   window.setTimeout(() => {
-    hero?.classList.add("is-active");
+    if (hero) hero.classList.add("is-active");
     updateScrollScene();
   }, 250);
 }
@@ -100,10 +101,12 @@ if (finePointer) {
     if (stage && window.innerWidth > 820) {
       const nx = (mouseX / window.innerWidth - 0.5) * 2;
       const ny = (mouseY / window.innerHeight - 0.5) * 2;
-      const rotation = (-5 + nx * 6).toFixed(2);
-      const tx = (nx * 15).toFixed(1);
-      const ty = (ny * 12).toFixed(1);
-      stage.style.transform = "rotate(" + rotation + "deg) translate3d(" + tx + "px, " + ty + "px, 0)";
+      const rotation = -5 + nx * 6;
+      const tx = nx * 15;
+      const ty = ny * 12;
+      stage.style.transform =
+        "rotate(" + rotation.toFixed(2) + "deg) translate3d(" +
+        tx.toFixed(1) + "px," + ty.toFixed(1) + "px,0)";
     }
 
     requestAnimationFrame(animatePointer);
@@ -111,7 +114,7 @@ if (finePointer) {
 
   animatePointer();
 
-  document.querySelectorAll("a, .project, .playlist").forEach((node) => {
+  document.querySelectorAll("a, .project, .question").forEach((node) => {
     node.addEventListener("mouseenter", () => {
       if (ring) {
         ring.style.width = "58px";
@@ -162,21 +165,33 @@ function updateScrollScene() {
     const rotate = heroProgress * 8;
 
     product.style.transform =
-      "translateY(calc(-50% + " + y + "px)) rotate(" + rotate + "deg) scale(" + scale + ")";
+      "translateY(calc(-50% + " + y + "px)) rotate(" +
+      rotate.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
     product.style.opacity = String(1 - heroProgress * 0.62);
   }
 
+  const manifesto = document.querySelector(".manifesto");
   if (manifesto) {
     const rect = manifesto.getBoundingClientRect();
-    const scene = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight * 0.9), 0), 1);
+    const scene = Math.min(
+      Math.max((window.innerHeight - rect.top) / (window.innerHeight * 0.9), 0),
+      1
+    );
     manifesto.style.setProperty("--scene-progress", scene.toFixed(3));
   }
 
+  const ticker = document.querySelector(".ticker");
   if (ticker) {
-    const tickerRect = ticker.getBoundingClientRect();
-    const drift = (window.innerHeight * 0.5 - tickerRect.top) * 0.035;
+    const rect = ticker.getBoundingClientRect();
+    const drift = (window.innerHeight * 0.5 - rect.top) * 0.035;
     ticker.style.setProperty("--ticker-drift", drift.toFixed(2) + "px");
   }
+
+  document.querySelectorAll(".journey-track").forEach((track) => {
+    const rect = track.getBoundingClientRect();
+    const drift = (window.innerHeight * 0.5 - rect.top) * 0.018;
+    track.style.setProperty("--journey-drift", drift.toFixed(2) + "px");
+  });
 }
 
 window.addEventListener("scroll", () => {
