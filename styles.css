@@ -237,3 +237,40 @@ img,svg,video{max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){
   .presence-state.online i,.presence-card::after{animation:none}
 }
+
+
+/* Animated Pauze header mark */
+.brand{display:inline-flex;align-items:center;gap:10px}
+.brand-name{display:inline-flex;align-items:flex-start}
+.brand-mark{
+  position:relative;display:grid;place-items:center;flex:none;
+  width:30px;height:30px;border:1px solid #343434;border-radius:50%;
+  background:#050505;overflow:hidden;
+  box-shadow:0 0 0 1px #111, inset 0 0 14px #fff08;
+}
+.brand-mark::before,.brand-mark::after{
+  content:"";position:absolute;inset:5px;border:1px solid #242424;border-radius:50%;
+}
+.brand-mark::after{
+  inset:9px;border-color:#454545;border-top-color:#eee;
+  animation:brandSpin 5s linear infinite;
+}
+.brand-mark i{
+  position:absolute;width:18px;height:1px;background:#eee;transform:rotate(-45deg);
+  opacity:.75;animation:brandSweep 2.8s ease-in-out infinite;
+}
+.brand-mark b{
+  position:relative;z-index:2;font:800 12px/1 'Space Grotesk',sans-serif;
+  letter-spacing:-.12em;
+}
+@keyframes brandSpin{to{transform:rotate(360deg)}}
+@keyframes brandSweep{0%,100%{transform:rotate(-45deg) scaleX(.55);opacity:.25}50%{transform:rotate(-45deg) scaleX(1);opacity:.9}}
+@media(max-width:820px){
+  .brand{gap:8px}
+  .brand-mark{width:27px;height:27px}
+  .brand-mark i{width:16px}
+  .brand-mark b{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-mark::after,.brand-mark i{animation:none}
+}
