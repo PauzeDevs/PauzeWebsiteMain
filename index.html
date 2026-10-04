@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261004-menu2" />
+  <link rel="stylesheet" href="styles.css?v=20261004-contact1" />
   <link rel="stylesheet" href="motion.css" />
   <link rel="stylesheet" href="case-studies.css" />
 </head>
@@ -122,9 +122,51 @@
         </article>
       </div>
     </section>
+    <section class="contact panel reveal" id="contact">
+      <div class="contact-head">
+        <div class="section-tag"><span>09</span><span>CONTACT / COLLAB</span></div>
+        <span class="mono">BUILD / MUSIC / IDEAS</span>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-intro">
+          <p class="eyebrow">WORK WITH PAUZE</p>
+          <h2>MAKE<br /><em>CONTACT.</em></h2>
+          <p>For software, creative development, music or collaboration, send a message through the form or use the direct contacts below.</p>
+
+          <div class="contact-emails">
+            <div class="contact-email">
+              <div><span>GITHUB / SOFTWARE COMMS</span><strong>githubpauze@gmail.com</strong></div>
+              <button class="copy-email" type="button" data-copy-email="githubpauze@gmail.com">COPY <b>↗</b></button>
+            </div>
+            <div class="contact-email">
+              <div><span>MUSIC / COLLAB COMMS</span><strong>pauzemusiccollab@gmail.com</strong></div>
+              <button class="copy-email" type="button" data-copy-email="pauzemusiccollab@gmail.com">COPY <b>↗</b></button>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="pauzeContactForm" action="https://formspree.io/f/maeqwvvv" method="POST">
+          <input type="hidden" name="_subject" value="New Pauze Website Collaboration" />
+          <div class="form-field"><label for="contactName">NAME</label><input id="contactName" name="name" type="text" autocomplete="name" placeholder="Your name" required /></div>
+          <div class="form-field"><label for="contactEmail">EMAIL</label><input id="contactEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required /></div>
+          <div class="form-field"><label for="contactType">COMMS TYPE</label>
+            <select id="contactType" name="type" required>
+              <option value="" selected disabled>Select a lane</option>
+              <option>GitHub / Software</option>
+              <option>Music / Collaboration</option>
+              <option>General / Other</option>
+            </select>
+          </div>
+          <div class="form-field"><label for="contactMessage">MESSAGE</label><textarea id="contactMessage" name="message" rows="6" placeholder="Tell Pauze what you're building..." required></textarea></div>
+          <button class="contact-submit magnetic" type="submit">SEND MESSAGE <b>↗</b></button>
+          <p class="contact-feedback" id="contactFeedback" role="status" aria-live="polite">FORM / READY</p>
+        </form>
+      </div>
+    </section>
     <section class="endcap reveal" id="end">
       <div class="endcap-bg" aria-hidden="true">PAUZE®</div>
-      <div class="endcap-top"><span>PAUZE®</span><span>END OF TRANSMISSION / 07</span></div>
+      <div class="endcap-top"><span>PAUZE®</span><span>END OF TRANSMISSION / 10</span></div>
       <div class="endcap-main">
         <p class="eyebrow">THE NEXT THING STARTS HERE.</p>
         <h2>SEE YOU<br /><span>AFTER HOURS.</span></h2>
@@ -161,6 +203,7 @@
         <a class="pauze-menu-link" href="#music"><small>05</small><strong>SOUND / PAUZE</strong><b>↗</b></a>
         <a class="pauze-menu-link" href="#connect"><small>06</small><strong>PAUZE / SYSTEM</strong><b>↗</b></a>
         <a class="pauze-menu-link" href="#community"><small>07</small><strong>COMMUNITY</strong><b>↗</b></a>
+        <a class="pauze-menu-link" href="#contact"><small>08</small><strong>CONTACT PAUZE</strong><b>↗</b></a>
       </nav>
       <div class="pauze-menu-bottom">
         <span>CODE / MUSIC / EXPERIMENTS<br />MAKE THINGS MOVE.</span>
@@ -169,6 +212,6 @@
     </div>
   </aside>
   <footer class="footer"><span>PAUZE®</span><span>BUILT AFTER HOURS.</span><span>© 2026</span></footer>
-  <script src="script.js"></script><script src="case-studies.js?v=20261004-vinyl2"></script><script src="menu.js?v=20261004-2"></script>
+  <script src="script.js"></script><script src="case-studies.js?v=20261004-contact1"></script><script src="menu.js?v=20261004-contact1"></script>
 </body>
 </html>
