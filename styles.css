@@ -438,3 +438,49 @@ img,svg,video{max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){
   .brand > .brand-mark::before,.brand > .brand-mark i{animation:none !important}
 }
+
+
+/* Pauze community feature system */
+.community{padding-top:10vw;border-top:1px solid var(--line)}
+.community-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5vw}
+.community-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.community-card{background:var(--bg);min-width:0;padding:34px;min-height:420px;display:flex;flex-direction:column}
+.community-card-top{display:flex;justify-content:space-between;align-items:center;gap:20px;font:8px 'DM Mono',monospace;letter-spacing:.14em;color:#555}
+.community-card-top>a{color:#777;text-decoration:none;font-size:17px}
+.community-card h3{font:700 clamp(48px,7vw,100px)/.82 'Space Grotesk',sans-serif;letter-spacing:-.09em;margin:55px 0 34px}
+.community-card h3 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #eee}
+.community-card>p{max-width:430px;color:#777;line-height:1.7;font-size:13px;margin:0 0 30px}
+.github-feed{border-top:1px solid #202020;margin-top:auto}
+.github-event{display:grid;grid-template-columns:9px 1fr auto;align-items:center;gap:15px;padding:17px 0;border-bottom:1px solid #1b1b1b}
+.github-event>span{width:6px;height:6px;border-radius:50%;background:#777}
+.github-event div{min-width:0;display:flex;flex-direction:column;gap:5px}
+.github-event strong{font:700 13px/1.15 'Space Grotesk',sans-serif;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.github-event small{font:8px 'DM Mono',monospace;letter-spacing:.12em;color:#4d4d4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.github-event>b{font:8px 'DM Mono',monospace;color:#444;font-weight:400;white-space:nowrap}
+.github-event.is-loading>span{animation:communityPulse 1s ease-in-out infinite}
+.github-empty{padding:22px 0;color:#555;font:8px 'DM Mono',monospace;letter-spacing:.12em}
+.community-cta{
+  width:max-content;max-width:100%;min-height:44px;padding:13px 16px;border:1px solid #303030;
+  color:#eee;background:transparent;text-decoration:none;display:inline-flex;align-items:center;gap:16px;
+  font:9px 'DM Mono',monospace;letter-spacing:.13em;cursor:pointer;transition:background .25s ease,color .25s ease,border-color .25s ease;
+}
+.community-cta b{font-size:15px;font-weight:400;color:#666}
+.community-cta:hover{background:#fff;color:#050505;border-color:#fff}
+.community-cta:hover b{color:#050505}
+.community-note{display:block;margin-top:auto;padding-top:18px;border-top:1px solid #1c1c1c;font:7px 'DM Mono',monospace;letter-spacing:.11em;color:#404040}
+.random-card{min-height:420px}
+.random-result{margin-top:auto;padding-top:18px;border-top:1px solid #1c1c1c;font:8px 'DM Mono',monospace;letter-spacing:.12em;color:#555;min-height:32px}
+#randomPauzeIndex{font-variant-numeric:tabular-nums}
+@keyframes communityPulse{50%{opacity:.35;transform:scale(.65)}}
+@media(max-width:820px){
+  .community{padding-top:24vw}
+  .community-head{margin-bottom:11vw}
+  .community-grid{grid-template-columns:1fr}
+  .community-card{min-height:360px;padding:24px}
+  .community-card h3{font-size:18vw;margin:45px 0 30px}
+  .github-event strong{font-size:12px}
+  .community-cta{width:100%;justify-content:space-between}
+}
+@media(prefers-reduced-motion:reduce){
+  .community-cta,.github-event.is-loading>span{transition:none;animation:none}
+}
