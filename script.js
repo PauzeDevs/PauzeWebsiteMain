@@ -717,7 +717,7 @@ connectLanyard();
     { label: "PAUZE / SYSTEM", type: "internal", value: "#connect" },
     { label: "GITHUB", type: "external", value: "https://github.com/PauzeDevs" },
     { label: "INSTAGRAM", type: "external", value: "https://www.instagram.com/Pauze.wav/" },
-    { label: "GUESTBOOK", type: "external", value: "https://github.com/PauzeDevs/PauzeWebsiteMain/discussions" }
+    { label: "GUESTBOOK", type: "external", value: "https://github.com/PauzeDevs/PauzeWebsiteMain/issues/new?template=guestbook.md" }
   ];
 
   function timeAgo(dateString) {
