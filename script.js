@@ -346,6 +346,7 @@ if (signalBars && !signalBars.children.length) {
 }
 
 let musicTick = false;
+let activeMusicSide = 0;
 
 function updateMusicScene() {
   if (!musicScene || window.innerWidth <= 820) return;
@@ -354,7 +355,11 @@ function updateMusicScene() {
   const travel = Math.max(musicScene.offsetHeight - window.innerHeight, 1);
   const progress = Math.max(0, Math.min(0.999, -rect.top / travel));
   const side = progress >= 0.5 ? 1 : 0;
-  selectMusicSide(side, true);
+
+  if (side !== activeMusicSide) {
+    activeMusicSide = side;
+    selectMusicSide(side, true);
+  }
 
   if (disc) {
     const tilt = (progress - 0.5) * 10;
@@ -373,5 +378,6 @@ window.addEventListener("scroll", () => {
 
 window.addEventListener("resize", updateMusicScene, { passive: true });
 
+activeMusicSide = 0;
 selectMusicSide(0);
 updateMusicScene();
