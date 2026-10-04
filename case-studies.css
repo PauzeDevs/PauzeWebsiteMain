@@ -6,3 +6,24 @@
 @keyframes caseOrbit{to{transform:rotate(382deg) scaleY(.34)}}@keyframes caseOrbitReverse{to{transform:rotate(-388deg) scaleY(.34)}}@keyframes scanDown{0%{transform:translateY(-50vh)}100%{transform:translateY(50vh)}}
 @media(max-width:820px){.case-studies{min-height:310vh}.case-sticky{position:sticky;height:100vh;min-height:620px;padding:10vh 7vw 8vh;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.case-head{width:100%;margin-bottom:0}.case-stage{height:50vh;min-height:310px;width:100%;margin:0}.case-art{width:170px;height:320px;border-radius:32px}.case-copy-wrap{height:25vh;min-height:170px;width:100%}.case-copy h2{font-size:20vw}.case-copy>p{margin-bottom:12px}.case-copy>div{margin-top:18px}.case-hint{position:absolute;left:7vw;right:7vw;bottom:3vh}.case-scroll-source{display:flex}.case-stage-meta{bottom:0}.case-hint i{display:none}}
 @media(prefers-reduced-motion:reduce){.case-stage::before,.case-stage::after,.case-scan{animation:none}.case-art,.case-copy{transition:none}}
+
+
+/* Responsive case-study stage */
+@media(min-width:821px) and (max-width:1199px){
+  .case-studies{min-height:290vh}
+  .case-sticky{
+    min-height:620px;
+    padding:6vh 5vw;
+    grid-template-columns:minmax(0,1.02fr) minmax(280px,.98fr);
+    gap:0 4vw
+  }
+  .case-stage,.case-copy-wrap{height:61vh;min-height:400px}
+  .case-art{width:min(25vw,270px);height:min(43vw,420px)}
+  .case-copy h2{font-size:clamp(68px,9.5vw,115px)}
+  .case-copy>div{margin-top:38px}
+  .case-hint{left:5vw;right:5vw;bottom:3vh}
+}
+@media(max-width:820px){
+  .case-sticky{height:100svh;min-height:600px}
+  .case-stage{min-height:300px}
+}
