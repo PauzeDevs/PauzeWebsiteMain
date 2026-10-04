@@ -27,6 +27,33 @@ const finePointer = window.matchMedia("(pointer:fine)").matches;
 const hero = document.getElementById("hero");
 const product = document.querySelector(".hero-product");
 const stage = document.querySelector(".product-stage");
+const can = document.querySelector(".product-can");
+
+/* Premium studio-lighting layer for the hero product. */
+if (can) {
+  const lighting = document.createElement("span");
+  lighting.className = "can-light";
+  const reflection = document.createElement("span");
+  reflection.className = "can-reflection";
+  const shine = document.createElement("span");
+  shine.className = "can-shine";
+  can.append(lighting, reflection, shine);
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .product-stage{transform-style:preserve-3d;will-change:transform}
+    .product-can{overflow:hidden;will-change:transform;filter:drop-shadow(0 35px 35px #000)}
+    .product-can::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(112deg,transparent 0%,transparent 34%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.08) 52%,transparent 62%);transform:translateX(-130%);animation:canSweep 5.5s ease-in-out infinite;pointer-events:none}
+    .can-light,.can-reflection,.can-shine{position:absolute;inset:0;border-radius:inherit;pointer-events:none}
+    .can-light{background:radial-gradient(circle at var(--light-x,50%) var(--light-y,35%),rgba(255,255,255,.8),transparent 25%);mix-blend-mode:screen;opacity:.55}
+    .can-reflection{background:linear-gradient(105deg,transparent 24%,rgba(255,255,255,.24) 34%,transparent 43%,rgba(255,255,255,.13) 68%,transparent 78%);mix-blend-mode:screen}
+    .can-shine{inset:-20%;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.25) 48%,transparent 56%);transform:translateX(-75%) rotate(8deg);animation:shinePass 7s ease-in-out infinite}
+    @keyframes canSweep{0%,58%{transform:translateX(-130%)}78%,100%{transform:translateX(130%)}}
+    @keyframes shinePass{0%,55%{transform:translateX(-75%) rotate(8deg)}80%,100%{transform:translateX(75%) rotate(8deg)}}
+    @media(prefers-reduced-motion:reduce){.product-can::after,.can-shine{animation:none}}
+  `;
+  document.head.appendChild(style);
+}
 
 if (finePointer) {
   const dot = document.querySelector(".cursor-dot");
@@ -52,13 +79,20 @@ if (finePointer) {
     if (stage && window.innerWidth > 820) {
       const nx = (mouseX / window.innerWidth - 0.5) * 2;
       const ny = (mouseY / window.innerHeight - 0.5) * 2;
-      stage.style.transform = `rotate(${(-5 + nx * 5).toFixed(2)}deg) translate3d(${(nx * 12).toFixed(1)}px, ${(ny * 10).toFixed(1)}px, 0)`;
+      const rx = -5 + nx * 5;
+      const ry = nx * 8;
+      const rx3d = ny * -7;
+      stage.style.transform = `rotate(${rx.toFixed(2)}deg) rotateX(${rx3d.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translate3d(${(nx * 10).toFixed(1)}px, ${(ny * 8).toFixed(1)}px, 0)`;
+      if (can) {
+        can.style.setProperty("--light-x", `${50 + nx * 35}%`);
+        can.style.setProperty("--light-y", `${38 + ny * 25}%`);
+      }
     }
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
 
-  document.querySelectorAll("a, .project, .playlist").forEach((node) => {
+  document.querySelectorAll("a, .project, .playlist, .product-can").forEach((node) => {
     node.addEventListener("mouseenter", () => {
       ring.style.width = "54px";
       ring.style.height = "54px";
