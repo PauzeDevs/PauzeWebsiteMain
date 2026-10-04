@@ -697,3 +697,114 @@ document.addEventListener("visibilitychange", () => {
 
 startPresenceFallback();
 connectLanyard();
+
+
+/* Pauze GitHub activity + Random Pauze */
+(() => {
+  const feed = document.getElementById("githubActivity");
+  const randomButton = document.getElementById("randomPauze");
+  const randomResult = document.getElementById("randomPauzeResult");
+  const randomIndex = document.getElementById("randomPauzeIndex");
+
+  const GH_EVENTS = "https://api.github.com/users/PauzeDevs/events/public?per_page=6";
+  const destinations = [
+    { label: "THE IDEA", type: "internal", value: "#idea" },
+    { label: "FOUR MOVES", type: "internal", value: "#moves" },
+    { label: "SELECTED WORK", type: "internal", value: "#work" },
+    { label: "THE JOURNEY", type: "internal", value: "#journey" },
+    { label: "EVERY MILESTONE", type: "internal", value: "#story" },
+    { label: "SOUND / PAUZE", type: "internal", value: "#music" },
+    { label: "PAUZE / SYSTEM", type: "internal", value: "#connect" },
+    { label: "GITHUB", type: "external", value: "https://github.com/PauzeDevs" },
+    { label: "INSTAGRAM", type: "external", value: "https://www.instagram.com/Pauze.wav/" },
+    { label: "GUESTBOOK", type: "external", value: "https://github.com/PauzeDevs/PauzeWebsiteMain/discussions" }
+  ];
+
+  function timeAgo(dateString) {
+    const seconds = Math.max(1, Math.floor((Date.now() - new Date(dateString).getTime()) / 1000));
+    if (seconds < 60) return seconds + "S AGO";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + "M AGO";
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + "H AGO";
+    const days = Math.floor(hours / 24);
+    return days + "D AGO";
+  }
+
+  function eventCopy(event) {
+    const repo = event.repo?.name || "PAUZEDEVS";
+    switch (event.type) {
+      case "PushEvent": {
+        const count = event.payload?.commits?.length || event.payload?.size || 1;
+        return { title: "PUSHED " + count + " COMMIT" + (count === 1 ? "" : "S") + " TO " + repo.split("/").pop(), meta: "CODE / " + timeAgo(event.created_at) };
+      }
+      case "CreateEvent":
+        return { title: "CREATED " + (event.payload?.ref_type || "REPO").toUpperCase() + " IN " + repo.split("/").pop(), meta: "CREATE / " + timeAgo(event.created_at) };
+      case "ReleaseEvent":
+        return { title: "RELEASED " + (event.payload?.release?.name || event.payload?.release?.tag_name || "A VERSION"), meta: repo + " / " + timeAgo(event.created_at) };
+      case "WatchEvent":
+        return { title: "STARRED " + repo, meta: "GITHUB / " + timeAgo(event.created_at) };
+      case "IssuesEvent":
+        return { title: (event.payload?.action || "UPDATED").toUpperCase() + " ISSUE IN " + repo.split("/").pop(), meta: "ISSUE / " + timeAgo(event.created_at) };
+      case "PullRequestEvent":
+        return { title: (event.payload?.action || "UPDATED").toUpperCase() + " PULL REQUEST", meta: repo + " / " + timeAgo(event.created_at) };
+      default:
+        return { title: event.type.replace(/Event$/, "").replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase() + " / " + repo, meta: "GITHUB / " + timeAgo(event.created_at) };
+    }
+  }
+
+  function renderEvents(events) {
+    if (!feed) return;
+    const useful = (events || []).filter((event) => event.type !== "PublicEvent").slice(0, 5);
+    if (!useful.length) {
+      feed.innerHTML = '<div class="github-empty">NO RECENT PUBLIC ACTIVITY / CHECK GITHUB ↗</div>';
+      return;
+    }
+
+    feed.innerHTML = useful.map((event) => {
+      const copy = eventCopy(event);
+      const url = event.repo?.url ? event.repo.url.replace("api.github.com/repos/", "github.com/") : "https://github.com/PauzeDevs";
+      return '<a class="github-event" href="' + url + '" target="_blank" rel="noreferrer">' +
+        '<span></span><div><strong>' + copy.title.replace(/</g, "&lt;") + '</strong><small>' + copy.meta.replace(/</g, "&lt;") + '</small></div><b>↗</b>' +
+      '</a>';
+    }).join("");
+  }
+
+  async function loadGithubActivity() {
+    if (!feed || document.hidden) return;
+    try {
+      const response = await fetch(GH_EVENTS + "&t=" + Date.now(), { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      renderEvents(await response.json());
+    } catch {
+      if (feed) feed.innerHTML = '<div class="github-empty">ACTIVITY TEMPORARILY UNAVAILABLE / OPEN GITHUB ↗</div>';
+    }
+  }
+
+  if (feed) {
+    loadGithubActivity();
+    const activityTimer = window.setInterval(loadGithubActivity, 300000);
+    window.addEventListener("beforeunload", () => window.clearInterval(activityTimer), { once: true });
+  }
+
+  if (randomButton) {
+    randomButton.addEventListener("click", () => {
+      const index = Math.floor(Math.random() * destinations.length);
+      const destination = destinations[index];
+      if (randomIndex) randomIndex.textContent = String(index + 1).padStart(2, "0") + " / " + String(destinations.length).padStart(2, "0");
+      if (randomResult) randomResult.textContent = "DESTINATION / " + destination.label;
+
+      if (destination.type === "internal") {
+        window.location.hash = destination.value.slice(1);
+        document.querySelector(destination.value)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        window.open(destination.value, "_blank", "noopener,noreferrer");
+      }
+
+      randomButton.animate(
+        [{ transform: "translateX(0)" }, { transform: "translateX(4px)" }, { transform: "translateX(-2px)" }, { transform: "translateX(0)" }],
+        { duration: 360, easing: "cubic-bezier(.16,1,.3,1)" }
+      );
+    });
+  }
+})();
