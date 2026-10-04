@@ -76,3 +76,19 @@ body.scene-started .manifesto{transition:background-color 1s}
 @media(max-width:820px){
  .start-button{width:210px;height:52px;margin-top:24px}
 }
+
+.manifesto-main h2{
+  transform:translate3d(calc((1 - var(--scene-progress,0)) * 34px),calc((1 - var(--scene-progress,0)) * 24px),0) scale(calc(.96 + var(--scene-progress,0) * .04));
+  transition:transform .2s linear;
+}
+.manifesto-main>p{
+  transform:translateY(calc((1 - var(--scene-progress,0)) * 20px));
+  opacity:calc(.45 + var(--scene-progress,0) * .55);
+  transition:transform .2s linear,opacity .2s linear;
+}
+.ticker-track{transform:translate3d(var(--ticker-drift,0px),0,0)}
+.hero-status{transition:opacity .2s linear}
+@media(prefers-reduced-motion:reduce){
+  .manifesto-main h2,.manifesto-main>p{transform:none;opacity:1}
+  .ticker-track{transform:none}
+}
