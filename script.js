@@ -207,3 +207,59 @@ window.addEventListener("scroll", () => {
 window.addEventListener("resize", updateScrollScene, { passive: true });
 
 updateScrollScene();
+
+
+const story = document.getElementById("story");
+const storyProduct = document.querySelector(".story-product");
+const storyCounter = document.getElementById("storyCounter");
+const storyCounterLine = document.querySelector(".story-counter i");
+const storySteps = Array.from(document.querySelectorAll(".story-step"));
+
+if (storySteps.length) {
+  const stepObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const active = storySteps.indexOf(entry.target);
+      if (active < 0) continue;
+
+      storySteps.forEach((step, index) => {
+        step.classList.toggle("is-active", index === active);
+      });
+
+      if (storyCounter) {
+        storyCounter.textContent = storySteps[active].dataset.step || String(active + 1).padStart(2, "0");
+      }
+
+      if (storyCounterLine) {
+        storyCounterLine.style.setProperty("--story-progress", ((active + 1) / storySteps.length * 100) + "%");
+      }
+
+      if (storyProduct) {
+        const rotations = [-8, 4, -14, 10];
+        const scales = [1, .94, .88, .82];
+        storyProduct.style.transform =
+          "translate3d(0," + (active * -6) + "px,0) rotate(" +
+          rotations[active] + "deg) scale(" + scales[active] + ")";
+      }
+    }
+  }, { threshold: 0.62, rootMargin: "-8% 0px -8% 0px" });
+
+  storySteps.forEach((step) => stepObserver.observe(step));
+}
+
+if (storyProduct) {
+  storyProduct.addEventListener("pointermove", (event) => {
+    if (window.innerWidth <= 820) return;
+    const rect = storyProduct.getBoundingClientRect();
+    const nx = (event.clientX - rect.left) / rect.width - 0.5;
+    const ny = (event.clientY - rect.top) / rect.height - 0.5;
+    storyProduct.style.transform =
+      "translate3d(" + (nx * 18).toFixed(1) + "px," +
+      (ny * 15).toFixed(1) + "px,0) rotate(" +
+      (nx * 7).toFixed(1) + "deg)";
+  });
+
+  storyProduct.addEventListener("pointerleave", () => {
+    storyProduct.style.transform = "";
+  });
+}
