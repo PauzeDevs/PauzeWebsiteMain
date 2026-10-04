@@ -214,3 +214,5 @@ body.scene-started .manifesto{transition:background-color 1s}
 @media(prefers-reduced-motion:reduce){
  .story-orbit,.story-product{animation:none}.story-can{transform:none}.story-step,.story-step.is-active{padding-left:0}
 }
+
+.story-counter i::after{width:var(--story-progress,25%)}
