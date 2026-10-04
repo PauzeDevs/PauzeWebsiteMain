@@ -639,5 +639,61 @@ function connectLanyard() {
   connect();
 }
 
-bootstrapPresence();
+let presencePollTimer = null;
+let presencePollBusy = false;
+
+async function refreshPresenceFallback() {
+  if (presencePollBusy || document.hidden) return;
+  presencePollBusy = true;
+
+  try {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
+
+    const response = await fetch(LANYARD_REST + "?t=" + Date.now(), {
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    window.clearTimeout(timeout);
+
+    if (!response.ok) throw new Error("Lanyard REST " + response.status);
+
+    const payload = await response.json();
+
+    if (payload.success && payload.data) {
+      renderPresence(payload.data);
+      setPresenceConnection("LIVE / REST FALLBACK");
+    } else {
+      throw new Error("Presence not available");
+    }
+  } catch {
+    if (presenceCard) {
+      const currentState = presenceState?.querySelector("span")?.textContent || "";
+      if (!currentState.includes("ONLINE") && !currentState.includes("IDLE") && !currentState.includes("DO NOT")) {
+        setPresenceConnection("WAITING / LANYARD");
+      }
+    }
+  } finally {
+    presencePollBusy = false;
+  }
+}
+
+function startPresenceFallback() {
+  window.clearInterval(presencePollTimer);
+  refreshPresenceFallback();
+  presencePollTimer = window.setInterval(refreshPresenceFallback, 15000);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    window.clearInterval(presencePollTimer);
+    presencePollTimer = null;
+  } else {
+    startPresenceFallback();
+  }
+});
+
+startPresenceFallback();
 connectLanyard();
