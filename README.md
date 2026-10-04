@@ -19,7 +19,8 @@ A monochrome cinematic personal site for **Pauze**, using the supplied Reel as a
 - Rotating music disc
 - Amazon Music playlists
 - GitHub profile and Instagram links
-- Responsive mobile layout
+- Live Discord presence via Lanyard REST/WebSocket
+- Responsive mobile, tablet and desktop layouts
 - Reduced-motion accessibility handling
 
 ## Links
@@ -43,7 +44,9 @@ No build step is required.
 index.html      # Page structure and content
 styles.css      # Base layout and visual system
 motion.css      # Cinematic motion, hover and reveal layer
-script.js       # Links, cursor, loader and scroll choreography
+script.js       # Links, cursor, loader, scroll choreography and Lanyard presence
+case-studies.js # Selected-work scene logic and case-study interactions
+case-studies.css# Selected-work cinematic styling
 ```
 
 ## Security
@@ -53,3 +56,10 @@ Do not commit API keys, deployment credentials, database credentials, or other s
 ## Maintainer
 
 Maintained by [PauzeDevs](https://github.com/PauzeDevs).
+
+
+## Lanyard setup
+
+The live system panel uses Lanyard for Discord presence. The website subscribes to the configured Discord user ID over Lanyard's public WebSocket and uses the REST endpoint as the initial fallback. The Discord account must be monitored by Lanyard (for example, by joining the Lanyard Discord server) before presence data can be returned.
+
+No Discord token or API key is stored in the website.
