@@ -16,25 +16,57 @@ for (const [id, url] of Object.entries({
 }
 
 const revealObserver = new IntersectionObserver((entries) => {
-  for (const entry of entries) {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) entry.target.classList.add("visible");
-  }
+  });
 }, { threshold: 0.14 });
 
 document.querySelectorAll(".reveal").forEach((node) => revealObserver.observe(node));
 
 const finePointer = window.matchMedia("(pointer:fine)").matches;
+const hero = document.getElementById("hero");
+const product = document.querySelector(".hero-product");
+const stage = document.querySelector(".product-stage");
+
 if (finePointer) {
   const dot = document.querySelector(".cursor-dot");
   const ring = document.querySelector(".cursor-ring");
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let currentX = mouseX;
+  let currentY = mouseY;
+
   window.addEventListener("pointermove", (event) => {
-    dot.style.left = event.clientX + "px";
-    dot.style.top = event.clientY + "px";
-    ring.animate({ left: event.clientX + "px", top: event.clientY + "px" }, { duration: 180, fill: "forwards" });
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    dot.style.left = `${mouseX}px`;
+    dot.style.top = `${mouseY}px`;
   }, { passive: true });
+
+  function animateCursor() {
+    currentX += (mouseX - currentX) * 0.12;
+    currentY += (mouseY - currentY) * 0.12;
+    ring.style.left = `${currentX}px`;
+    ring.style.top = `${currentY}px`;
+
+    if (stage && window.innerWidth > 820) {
+      const nx = (mouseX / window.innerWidth - 0.5) * 2;
+      const ny = (mouseY / window.innerHeight - 0.5) * 2;
+      stage.style.transform = `rotate(${(-5 + nx * 5).toFixed(2)}deg) translate3d(${(nx * 12).toFixed(1)}px, ${(ny * 10).toFixed(1)}px, 0)`;
+    }
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
   document.querySelectorAll("a, .project, .playlist").forEach((node) => {
-    node.addEventListener("mouseenter", () => { ring.style.width = "54px"; ring.style.height = "54px"; });
-    node.addEventListener("mouseleave", () => { ring.style.width = "34px"; ring.style.height = "34px"; });
+    node.addEventListener("mouseenter", () => {
+      ring.style.width = "54px";
+      ring.style.height = "54px";
+    });
+    node.addEventListener("mouseleave", () => {
+      ring.style.width = "34px";
+      ring.style.height = "34px";
+    });
   });
 }
 
@@ -48,23 +80,23 @@ document.querySelectorAll(".magnetic").forEach((node) => {
   node.addEventListener("pointerleave", () => { node.style.transform = ""; });
 });
 
-const hero = document.getElementById("hero");
-const product = document.querySelector(".hero-product");
 let ticking = false;
-
 function updateHero() {
   if (!hero || !product || window.innerWidth <= 820) return;
   const progress = Math.min(Math.max(window.scrollY / hero.offsetHeight, 0), 1);
-  const rotate = -5 + progress * 30;
+  const y = progress * 115;
   const scale = 1 - progress * 0.18;
-  product.style.transform = `translateY(calc(-50% + ${progress * 95}px)) rotate(${progress * 3}deg) scale(${scale})`;
-  product.style.opacity = String(1 - progress * 0.45);
+  product.style.transform = `translateY(calc(-50% + ${y}px)) rotate(${progress * 4}deg) scale(${scale})`;
+  product.style.opacity = String(1 - progress * 0.5);
 }
 
 window.addEventListener("scroll", () => {
   if (ticking) return;
   ticking = true;
-  requestAnimationFrame(() => { updateHero(); ticking = false; });
+  requestAnimationFrame(() => {
+    updateHero();
+    ticking = false;
+  });
 }, { passive: true });
 
 updateHero();
