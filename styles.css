@@ -484,3 +484,56 @@ img,svg,video{max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){
   .community-cta,.github-event.is-loading>span{transition:none;animation:none}
 }
+
+/* Pauze contact system */
+.contact{padding-top:10vw;border-top:1px solid var(--line)}
+.contact-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6vw}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:7vw;align-items:start}
+.contact-intro h2{font:700 clamp(64px,9vw,138px)/.8 'Space Grotesk',sans-serif;letter-spacing:-.09em;margin:28px 0 38px}
+.contact-intro h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #eee}
+.contact-intro>p:not(.eyebrow){max-width:460px;color:#777;line-height:1.8;font-size:13px;margin:0}
+.contact-emails{border-top:1px solid var(--line);margin-top:48px}
+.contact-email{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:21px 0;border-bottom:1px solid var(--line)}
+.contact-email>div{display:flex;flex-direction:column;gap:8px;min-width:0}
+.contact-email>div>span{font:7px 'DM Mono',monospace;letter-spacing:.13em;color:#505050}
+.contact-email strong{font:600 clamp(15px,1.8vw,21px) 'Space Grotesk',sans-serif;letter-spacing:-.03em;word-break:break-all}
+.copy-email{flex:none;min-height:40px;padding:10px 12px;border:1px solid #303030;background:transparent;color:#eee;font:8px 'DM Mono',monospace;letter-spacing:.13em;cursor:pointer}
+.copy-email b{font-size:13px;margin-left:5px;color:#666;font-weight:400}
+.copy-email:hover{background:#fff;color:#050505;border-color:#fff}
+.copy-email:hover b{color:#050505}
+.contact-form{border-top:1px solid var(--line)}
+.form-field{display:flex;flex-direction:column;gap:9px;padding:18px 0;border-bottom:1px solid var(--line)}
+.form-field label{font:7px 'DM Mono',monospace;letter-spacing:.14em;color:#515151}
+.form-field input,.form-field textarea,.form-field select{
+  width:100%;border:0;outline:0;background:transparent;color:#eee;padding:0;
+  font:500 16px/1.45 Manrope,system-ui,sans-serif;resize:vertical;
+}
+.form-field input::placeholder,.form-field textarea::placeholder{color:#444}
+.form-field select{appearance:none;cursor:pointer}
+.form-field select option{background:#050505;color:#eee}
+.contact-submit{
+  margin-top:22px;min-height:48px;width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:13px 16px;border:1px solid #303030;background:transparent;color:#eee;cursor:pointer;
+  font:9px 'DM Mono',monospace;letter-spacing:.13em;transition:.25s;
+}
+.contact-submit b{font-size:15px;color:#666;font-weight:400}
+.contact-submit:hover{background:#fff;color:#050505;border-color:#fff}
+.contact-submit:hover b{color:#050505}
+.contact-submit:disabled{opacity:.45;cursor:wait}
+.contact-feedback{min-height:18px;margin:12px 0 0;text-align:right;color:#555;font:7px 'DM Mono',monospace;letter-spacing:.12em}
+.contact-feedback.is-success{color:#aaa}
+.contact-feedback.is-error{color:#777}
+@media(max-width:820px){
+  .contact{padding-top:24vw}
+  .contact-head{margin-bottom:11vw}
+  .contact-grid{grid-template-columns:1fr;gap:15vw}
+  .contact-intro h2{font-size:20vw;margin-bottom:32px}
+  .contact-intro>p:not(.eyebrow){font-size:12px}
+  .contact-emails{margin-top:38px}
+  .contact-email{align-items:flex-end}
+  .contact-email strong{font-size:14px}
+  .form-field input,.form-field textarea,.form-field select{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){
+  .copy-email,.contact-submit{transition:none}
+}
