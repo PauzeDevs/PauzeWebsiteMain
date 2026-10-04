@@ -263,3 +263,115 @@ if (storyProduct) {
     storyProduct.style.transform = "";
   });
 }
+
+
+const musicScene = document.getElementById("music");
+const playlistChoices = Array.from(document.querySelectorAll(".playlist-choice"));
+const listenButton = document.getElementById("listenButton");
+const musicTitle = document.getElementById("musicTitle");
+const musicDescription = document.getElementById("musicDescription");
+const musicMode = document.getElementById("musicMode");
+const recordEyebrow = document.getElementById("recordEyebrow");
+const selectorFill = document.getElementById("selectorFill");
+const musicStatus = document.getElementById("musicStatus");
+const signalBars = document.getElementById("signalBars");
+const disc = document.querySelector(".interactive-disc");
+
+const MUSIC_SIDES = [
+  {
+    eyebrow: "SIDE A / PUNJAB",
+    mode: "NOW SPINNING",
+    title: "PUNJAB<br /><em>DA PIND.</em>",
+    description: "A late-night Punjabi side of the Pauze headspace.",
+    url: LINKS.punjab,
+    status: "SIDE A READY"
+  },
+  {
+    eyebrow: "SIDE B / ENGLISH",
+    mode: "NOW SPINNING",
+    title: "ESSENTIALS<br /><em>ENGLISH.</em>",
+    description: "A clean English soundtrack for focus, motion and after-hours.",
+    url: LINKS.english,
+    status: "SIDE B READY"
+  }
+];
+
+function selectMusicSide(index, fromScroll = false) {
+  const safe = Math.max(0, Math.min(index, MUSIC_SIDES.length - 1));
+  const side = MUSIC_SIDES[safe];
+
+  playlistChoices.forEach((button, i) => {
+    const active = i === safe;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+
+  if (musicTitle) musicTitle.innerHTML = side.title;
+  if (musicDescription) musicDescription.textContent = side.description;
+  if (musicMode) musicMode.textContent = side.mode;
+  if (recordEyebrow) recordEyebrow.textContent = side.eyebrow;
+  if (musicStatus) musicStatus.textContent = side.status;
+  if (listenButton) {
+    listenButton.href = side.url;
+    listenButton.setAttribute("aria-label", "Open " + side.eyebrow + " on Amazon Music");
+  }
+  if (selectorFill) selectorFill.style.transform = "translateX(" + (safe * 100) + "%)";
+  if (musicScene) musicScene.classList.toggle("side-b", safe === 1);
+
+  if (disc) {
+    disc.animate(
+      [
+        { transform: "scale(1) rotate(0deg)" },
+        { transform: "scale(.96) rotate(-12deg)" },
+        { transform: "scale(1) rotate(12deg)" }
+      ],
+      { duration: fromScroll ? 480 : 620, easing: "cubic-bezier(.16,1,.3,1)" }
+    );
+  }
+}
+
+playlistChoices.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectMusicSide(Number(button.dataset.playlist) || 0);
+  });
+});
+
+if (signalBars && !signalBars.children.length) {
+  for (let i = 0; i < 48; i++) {
+    const bar = document.createElement("i");
+    bar.style.setProperty("--h", (25 + ((i * 17) % 70)) + "%");
+    bar.style.animationDelay = (i * 35) + "ms";
+    signalBars.appendChild(bar);
+  }
+}
+
+let musicTick = false;
+
+function updateMusicScene() {
+  if (!musicScene || window.innerWidth <= 820) return;
+
+  const rect = musicScene.getBoundingClientRect();
+  const travel = Math.max(musicScene.offsetHeight - window.innerHeight, 1);
+  const progress = Math.max(0, Math.min(0.999, -rect.top / travel));
+  const side = progress >= 0.5 ? 1 : 0;
+  selectMusicSide(side, true);
+
+  if (disc) {
+    const tilt = (progress - 0.5) * 10;
+    disc.style.setProperty("--scroll-tilt", tilt.toFixed(2) + "deg");
+  }
+}
+
+window.addEventListener("scroll", () => {
+  if (musicTick) return;
+  musicTick = true;
+  requestAnimationFrame(() => {
+    updateMusicScene();
+    musicTick = false;
+  });
+}, { passive: true });
+
+window.addEventListener("resize", updateMusicScene, { passive: true });
+
+selectMusicSide(0);
+updateMusicScene();
