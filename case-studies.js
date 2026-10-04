@@ -12,8 +12,10 @@ function setCase(index) {
   if (caseProgress) caseProgress.style.setProperty('--case-progress', ((safe + 1) / caseArts.length * 100) + '%');
 }
 
+setCase(0);
+
 function updateCases() {
-  if (!caseSection || !caseArts.length || window.innerWidth <= 820) return;
+  if (!caseSection || !caseArts.length) return;
   const rect = caseSection.getBoundingClientRect();
   const travel = Math.max(caseSection.offsetHeight - window.innerHeight, 1);
   const progress = Math.max(0, Math.min(0.999, -rect.top / travel));
@@ -29,7 +31,7 @@ window.addEventListener('scroll', () => {
 window.addEventListener('resize', updateCases, { passive: true });
 updateCases();
 
-caseArts.forEach((art, index) => {
+caseArts.forEach((art) => {
   art.addEventListener('pointermove', (event) => {
     if (window.innerWidth <= 820) return;
     const rect = art.getBoundingClientRect();
