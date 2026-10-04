@@ -305,3 +305,101 @@ caseModal?.addEventListener("click", (event) => { if (event.target === caseModal
   links.forEach((link) => link.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
 })();
+
+
+/* Vinyl interaction — tactile side switching */
+(() => {
+  const vinyl = document.querySelector(".interactive-disc");
+  const musicScene = document.getElementById("music");
+  const choices = [...document.querySelectorAll(".playlist-choice")];
+  if (!vinyl || choices.length < 2) return;
+
+  vinyl.setAttribute("role", "button");
+  vinyl.setAttribute("tabindex", "0");
+  vinyl.setAttribute("aria-label", "Flip vinyl side");
+  vinyl.dataset.side = "0";
+
+  let startX = null;
+  let startY = null;
+
+  function setVinylTilt(event) {
+    if (window.innerWidth <= 820) return;
+    const rect = vinyl.getBoundingClientRect();
+    const nx = (event.clientX - rect.left) / rect.width - 0.5;
+    const ny = (event.clientY - rect.top) / rect.height - 0.5;
+    vinyl.style.setProperty("--vinyl-x", (nx * 7).toFixed(2) + "deg");
+    vinyl.style.setProperty("--vinyl-y", (ny * -5).toFixed(2) + "deg");
+  }
+
+  function resetVinylTilt() {
+    vinyl.style.setProperty("--vinyl-x", "0deg");
+    vinyl.style.setProperty("--vinyl-y", "0deg");
+  }
+
+  function flipVinyl(direction = 1) {
+    const current = Number(vinyl.dataset.side || "0");
+    const next = direction < 0 ? 0 : 1;
+    const target = current === next ? (current === 0 ? 1 : 0) : next;
+    vinyl.dataset.side = String(target);
+
+    const choice = choices[target];
+    if (choice) choice.click();
+
+    vinyl.animate(
+      [
+        { transform: "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)" },
+        { transform: "perspective(900px) rotateX(3deg) rotateY(78deg) scale(.97)" },
+        { transform: "perspective(900px) rotateX(0deg) rotateY(168deg) scale(.96)" },
+        { transform: "perspective(900px) rotateX(-2deg) rotateY(248deg) scale(.98)" },
+        { transform: "perspective(900px) rotateX(0deg) rotateY(360deg) scale(1)" }
+      ],
+      { duration: 900, easing: "cubic-bezier(.16,1,.3,1)" }
+    );
+
+    if (musicScene) {
+      musicScene.classList.toggle("side-b", target === 1);
+    }
+  }
+
+  vinyl.addEventListener("pointermove", setVinylTilt);
+  vinyl.addEventListener("pointerleave", resetVinylTilt);
+  vinyl.addEventListener("pointerdown", (event) => {
+    startX = event.clientX;
+    startY = event.clientY;
+    vinyl.setPointerCapture?.(event.pointerId);
+  });
+  vinyl.addEventListener("pointerup", (event) => {
+    if (startX === null) return;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+    startX = null;
+    startY = null;
+    resetVinylTilt();
+
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+      flipVinyl(dx < 0 ? 1 : -1);
+    }
+  });
+  vinyl.addEventListener("pointercancel", () => {
+    startX = null;
+    startY = null;
+    resetVinylTilt();
+  });
+  vinyl.addEventListener("click", () => {
+    flipVinyl();
+  });
+  vinyl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      flipVinyl();
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      flipVinyl(-1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      flipVinyl(1);
+    }
+  });
+})();
