@@ -321,55 +321,56 @@ caseModal?.addEventListener("click", (event) => { if (event.target === caseModal
 
   let startX = null;
   let startY = null;
-
-  function setVinylTilt(event) {
-    if (window.innerWidth <= 820) return;
-    const rect = vinyl.getBoundingClientRect();
-    const nx = (event.clientX - rect.left) / rect.width - 0.5;
-    const ny = (event.clientY - rect.top) / rect.height - 0.5;
-    vinyl.style.setProperty("--vinyl-x", (nx * 7).toFixed(2) + "deg");
-    vinyl.style.setProperty("--vinyl-y", (ny * -5).toFixed(2) + "deg");
-  }
+  let ignoreClick = false;
 
   function resetVinylTilt() {
     vinyl.style.setProperty("--vinyl-x", "0deg");
     vinyl.style.setProperty("--vinyl-y", "0deg");
   }
 
-  function flipVinyl(direction = 1) {
+  function flipVinyl(target = null) {
     const current = Number(vinyl.dataset.side || "0");
-    const next = direction < 0 ? 0 : 1;
-    const target = current === next ? (current === 0 ? 1 : 0) : next;
-    vinyl.dataset.side = String(target);
+    const next = target === null ? (current === 0 ? 1 : 0) : Math.max(0, Math.min(target, 1));
+    vinyl.dataset.side = String(next);
 
-    const choice = choices[target];
+    const choice = choices[next];
     if (choice) choice.click();
 
     vinyl.animate(
       [
-        { transform: "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)" },
-        { transform: "perspective(900px) rotateX(3deg) rotateY(78deg) scale(.97)" },
-        { transform: "perspective(900px) rotateX(0deg) rotateY(168deg) scale(.96)" },
-        { transform: "perspective(900px) rotateX(-2deg) rotateY(248deg) scale(.98)" },
-        { transform: "perspective(900px) rotateX(0deg) rotateY(360deg) scale(1)" }
+        { transform: "rotate(0deg) scale(1)" },
+        { transform: "rotate(6deg) scale(.97)" },
+        { transform: "rotate(168deg) scale(.96)" },
+        { transform: "rotate(264deg) scale(.98)" },
+        { transform: "rotate(360deg) scale(1)" }
       ],
       { duration: 900, easing: "cubic-bezier(.16,1,.3,1)" }
     );
 
-    if (musicScene) {
-      musicScene.classList.toggle("side-b", target === 1);
-    }
+    if (musicScene) musicScene.classList.toggle("side-b", next === 1);
   }
 
-  vinyl.addEventListener("pointermove", setVinylTilt);
+  vinyl.addEventListener("pointermove", (event) => {
+    if (window.innerWidth <= 820) return;
+    const rect = vinyl.getBoundingClientRect();
+    const nx = (event.clientX - rect.left) / rect.width - 0.5;
+    const ny = (event.clientY - rect.top) / rect.height - 0.5;
+    vinyl.style.setProperty("--vinyl-x", (nx * 7).toFixed(2) + "deg");
+    vinyl.style.setProperty("--vinyl-y", (ny * -5).toFixed(2) + "deg");
+  });
+
   vinyl.addEventListener("pointerleave", resetVinylTilt);
+
   vinyl.addEventListener("pointerdown", (event) => {
     startX = event.clientX;
     startY = event.clientY;
+    ignoreClick = false;
     vinyl.setPointerCapture?.(event.pointerId);
   });
+
   vinyl.addEventListener("pointerup", (event) => {
     if (startX === null) return;
+
     const dx = event.clientX - startX;
     const dy = event.clientY - startY;
     startX = null;
@@ -377,27 +378,31 @@ caseModal?.addEventListener("click", (event) => { if (event.target === caseModal
     resetVinylTilt();
 
     if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
-      flipVinyl(dx < 0 ? 1 : -1);
+      ignoreClick = true;
+      flipVinyl(dx < 0 ? 1 : 0);
+      window.setTimeout(() => { ignoreClick = false; }, 80);
     }
   });
+
   vinyl.addEventListener("pointercancel", () => {
     startX = null;
     startY = null;
     resetVinylTilt();
   });
+
   vinyl.addEventListener("click", () => {
+    if (ignoreClick) return;
     flipVinyl();
   });
+
   vinyl.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       flipVinyl();
-    }
-    if (event.key === "ArrowLeft") {
+    } else if (event.key === "ArrowLeft") {
       event.preventDefault();
-      flipVinyl(-1);
-    }
-    if (event.key === "ArrowRight") {
+      flipVinyl(0);
+    } else if (event.key === "ArrowRight") {
       event.preventDefault();
       flipVinyl(1);
     }
