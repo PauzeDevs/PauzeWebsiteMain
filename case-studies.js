@@ -4,7 +4,7 @@ const caseCopies = [...document.querySelectorAll('.case-copy')];
 const caseNumber = document.getElementById('caseNumber');
 const caseProgress = document.querySelector('.case-stage-meta i');
 
-let activeCase = 0;
+let activeCase = -1;
 
 function setCase(index) {
   const safe = Math.max(0, Math.min(index, caseArts.length - 1));
