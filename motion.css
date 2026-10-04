@@ -377,7 +377,7 @@ body.scene-started .manifesto{transition:background-color 1s}
 .endcap-bottom .back-top{margin:0;color:#f5f5f2}
 @keyframes endFloat{50%{transform:translateX(2%) translateY(-2%)}}
 body.modal-open{overflow:hidden}
-html.modal-lock{scroll-behavior:auto}
+html.modal-lock{scroll-behavior:auto;overflow:hidden}
 
 @media(max-width:820px){
   .scene-wash{height:2px}
