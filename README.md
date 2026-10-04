@@ -28,7 +28,7 @@ A monochrome cinematic personal site for **Pauze**, using the supplied Reel as a
 The live links are configured in `script.js`:
 
 - GitHub: https://github.com/PauzeDevs
-- Instagram: https://www.instagram.com/highonthehighwayy/
+- Instagram: https://www.instagram.com/Pauze.wav/
 - Punjab Da Pind: Amazon Music playlist
 - Essentials — English Songs: Amazon Music playlist
 
