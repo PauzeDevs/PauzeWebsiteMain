@@ -1,22 +1,55 @@
-# Pauze — Website
+# Pauze® — Website
 
-A cinematic, dark personal site for **Pauze**, inspired by the motion language and editorial feel of the supplied reference Reel while using original Pauze branding and layout.
+A monochrome cinematic personal site for **Pauze**, using the supplied Reel as a visual/motion reference while keeping the branding and implementation original.
 
-## Included
+## Experience
 
-- Responsive cinematic landing page
-- Animated hero orb / visual system
-- Scroll reveal transitions
-- Marquee section
-- Work / capabilities cards
-- Music section
-- GitHub, Instagram and Amazon Music links
-- No framework or build step required
+- Click-to-start cinematic entry screen
+- Oversized editorial typography
+- Monochrome floating product/can constellation
+- Metallic light sweep and depth effects
+- Cursor-following hero lighting and parallax
+- Scroll progress indicator
+- Scroll-driven hero exit
+- Consistent reveal animations across sections
+- Staggered card/link reveals
+- Interactive question grid
+- Hover-to-expand project previews
+- Animated journey/timeline scene
+- Rotating music disc
+- Amazon Music playlists
+- GitHub profile and Instagram links
+- Responsive mobile layout
+- Reduced-motion accessibility handling
+
+## Links
+
+The live links are configured in `script.js`:
+
+- GitHub: https://github.com/PauzeDevs
+- Instagram: https://www.instagram.com/highonthehighwayy/
+- Punjab Da Pind: Amazon Music playlist
+- Essentials — English Songs: Amazon Music playlist
 
 ## Run locally
 
-Open `index.html` in a browser, or serve the folder with any static web server.
+Open `index.html` directly, or serve the repository with any static web server.
 
-## Customize links
+No build step is required.
 
-Edit the `links` object at the top of `script.js` with the final Amazon Music playlist, GitHub profile/repository, and Instagram URL.
+## Structure
+
+```
+index.html      # Page structure and content
+styles.css      # Base layout and visual system
+motion.css      # Cinematic motion, hover and reveal layer
+script.js       # Links, cursor, loader and scroll choreography
+```
+
+## Security
+
+Do not commit API keys, deployment credentials, database credentials, or other secrets.
+
+## Maintainer
+
+Maintained by [PauzeDevs](https://github.com/PauzeDevs).
